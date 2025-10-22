@@ -1,11 +1,106 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-// Desafio Detective Quest
-// Tema 4 - Árvores e Tabela Hash
-// Este código inicial serve como base para o desenvolvimento das estruturas de navegação, pistas e suspeitos.
-// Use as instruções de cada região para desenvolver o sistema completo com árvore binária, árvore de busca e tabela hash.
+// Estrutura da Sala (nó da árvore)
+typedef struct Sala {
+    char nome[50];           // Nome da sala
+    struct Sala* esquerda;   // Ponteiro para a sala à esquerda
+    struct Sala* direita;    // Ponteiro para a sala à direita
+} Sala;
+
+// Função para criar uma nova sala
+Sala* criarSala(char nome[]) {
+    Sala *nova = (Sala*) malloc(sizeof(Sala)); // Aloca memória
+
+    if (nova == NULL) {
+        printf("Erro ao alocar memória!\n");
+        exit(1);
+    }
+
+    strcpy(nova->nome, nome);   // Copia o nome
+    nova->esquerda = NULL;
+    nova->direita = NULL;
+
+    return nova; // Retorna o ponteiro para a sala criada
+}
+
+//Função para conectar salas
+void conectarSalas(Sala* principal, Sala* esquerda, Sala* direita) {
+    principal-> esquerda = esquerda;
+    principal-> direita = direita;
+}
+
+
+// Função para Explorar as salas
+void explorarSalas(Sala* atual) {
+    char opcao;
+
+    while (1) {
+        printf("\nVocê está na sala: %s\n", atual->nome);
+        printf("Digite 'e' para ir à esquerda, 'd' para ir à direita ou 's' para sair: ");
+        scanf(" %c", &opcao);
+        
+        if (opcao =='s') {
+            printf("Exploração encerrada.Até a próxima!\n");
+            break;
+        }    
+        
+        else if (opcao == 'e') {
+            if (atual->esquerda != NULL) {
+                atual = atual->esquerda;
+            } else{
+                printf("Não há sala à esquerda!\n");
+            }
+
+            
+        }
+        else if (opcao == 'd') {
+            if (atual->direita != NULL) {
+                atual = atual->direita;
+            } else {
+                printf("Não há sala à direita!\n");
+            }
+        }
+        else {
+            printf("opção inválida! Tente novamente.\n");
+        }
+
+        
+        
+
+    }
+    
+}
+
+//Programa principal
 
 int main() {
+    printf("Desafio 🌱 Nível Novato jogo Detective Quest - Mapa da Mansão!\n");
+
+    Sala *hall = criarSala("Hall de Entrada");
+    Sala *biblioteca = criarSala("Biblioteca");
+    Sala *cozinha = criarSala("Cozinha");
+    Sala *sotao = criarSala("Sotão");
+    Sala *jardim = criarSala("Jardim");
+
+    //conexoes entre as salas
+    conectarSalas(hall, biblioteca, cozinha);
+    conectarSalas(biblioteca, sotao, NULL);
+    conectarSalas(cozinha,NULL, jardim);
+
+    //Iniciar exploração
+    explorarSalas(hall);
+
+    //Lideração da memória
+    free(hall);
+    free(biblioteca);
+    free(cozinha);
+    free(sotao);
+    free(jardim);
+
+    return 0;
+}
 
     // 🌱 Nível Novato: Mapa da Mansão com Árvore Binária
     //
@@ -42,6 +137,5 @@ int main() {
     // - Em caso de colisão, use lista encadeada para tratar.
     // - Modularize com funções como inicializarHash(), buscarSuspeito(), listarAssociacoes().
 
-    return 0;
-}
+
 
